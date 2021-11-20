@@ -38,6 +38,9 @@ class CalculadoraControlador {
 
 	clearAll() {
 		this._operator = [];
+		this._lastNumber = '';
+		this.lastOperator = '';
+
 		this.setLastToDisplay();
 	}
 
@@ -124,13 +127,21 @@ class CalculadoraControlador {
 		this.displayCalc = lastNumber;
 	}
 
+	addDot() {
+		let lastOperator = this.getLastOperator()
+		if(this.isOperator(lastOperator) || !lastOperator) {
+			this.pushOperator('0.');
+		}else{
+			this.setLastOperator(lastOperator.toString() + '.');
+		}
+		this.setLastToDisplay();
+	}
+
 
 	addOperation(value) {
 		if (isNaN(this.getLastOperator())) {
 			if (this.isOperator(value)) {
 				this.setLastOperator(value);
-			} else if (isNaN(value)) {
-				console.log("outra coisa", value);
 			} else {
 				this.pushOperator(value);
 				this.setLastToDisplay();
@@ -140,7 +151,7 @@ class CalculadoraControlador {
 				this.pushOperator(value);
 			} else {
 				let newValue = this.getLastOperator().toString() + value.toString();
-				this.setLastOperator(parseInt(newValue));
+				this.setLastOperator(parseFloat(newValue));
 				this.setLastToDisplay();
 			}
 		}
@@ -173,7 +184,7 @@ class CalculadoraControlador {
 				this.addOperation('%');
 				break;
 			case 'ponto':
-				this.addOperation('.');
+				this.addDot();
 				break;
 			case '0':
 			case '1':
@@ -185,7 +196,7 @@ class CalculadoraControlador {
 			case '7':
 			case '8':
 			case '9':
-				this.addOperation(parseInt(value));
+				this.addOperation(parseFloat(value));
 				break;
 
 			default:
