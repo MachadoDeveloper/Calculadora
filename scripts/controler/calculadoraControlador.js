@@ -15,6 +15,7 @@ class CalculadoraControlador {
 		this._$displayCalc = document.querySelector('#display');
 		this._$date = document.querySelector('#data');
 		this._$time = document.querySelector('#hora');
+		this._currentDate;
 		this.initialize();
 		this.initButtonsEvents();
 	}
@@ -22,6 +23,7 @@ class CalculadoraControlador {
 	initialize() {
 		this.setDisplayDateTime();
 		setInterval(() => this.setDisplayDateTime(), 1000);
+		this.setLastToDisplay();
 	}
 
 	addEventListenerAll(element, events, func) {
@@ -45,7 +47,7 @@ class CalculadoraControlador {
 	}
 
 	isOperator(value) {
-		return ['+', '-', '*', '/', '%'].indexOf(value) > -1;
+		return (['+', '-', '*', '/', '%'].indexOf(value) > -1);
 	}
 
 	setLastOperator(value) {
@@ -64,9 +66,9 @@ class CalculadoraControlador {
 		let last = '';
 		this._lastOperator = this.getLastItem();
 
-		if(this._operator.length < 3){
+		if (this._operator.length < 3) {
 			let fisrtItem = this._operator[0];
-			this._operator = [fisrtItem, this._lastOperator,this.lastNumber];
+			this._operator = [fisrtItem, this._lastOperator, this.lastNumber];
 		}
 
 		if (this._operator.length > 3) {
@@ -77,11 +79,11 @@ class CalculadoraControlador {
 		}
 
 		let result = this.getResult();
-		
+
 
 		if (last == '%') {
 			result /= 100;
-			this._operator = [result]
+			this._operator = [result];
 
 		} else {
 			this._operator = [result];
@@ -100,25 +102,25 @@ class CalculadoraControlador {
 	getLastItem(isOperator = true) {
 		let lastItem;
 		for (let i = this._operator.length - 1; i >= 0; i--) {
-			if (isOperator) {
-				if (this.isOperator(this._operator[i]) == isOperator) {
-					lastItem = this._operator[i];
-					break;
-				}
 
+			if (this.isOperator(this._operator[i]) == isOperator) {
+				lastItem = this._operator[i];
+				break;
 			}
-			if(!lastItem){
-				lastItem  = (isOperator) ?this._lastOperator : this.lastNumber;
-			}
-			
+
 		}
+		if (!lastItem) {
+			lastItem = (isOperator) ? this._lastOperator : this.lastNumber;
+		}
+
+
 		return lastItem;
-	
+
 	}
 
 	setLastToDisplay() {
 		let lastNumber = this.getLastItem(false);
-		if (!lastNumber)lastNumber = 0;
+		if (!lastNumber) lastNumber = 0;
 		this.displayCalc = lastNumber;
 	}
 
@@ -128,7 +130,7 @@ class CalculadoraControlador {
 			if (this.isOperator(value)) {
 				this.setLastOperator(value);
 			} else if (isNaN(value)) {
-				
+				console.log("outra coisa", value);
 			} else {
 				this.pushOperator(value);
 				this.setLastToDisplay();
@@ -141,9 +143,8 @@ class CalculadoraControlador {
 				this.setLastOperator(parseInt(newValue));
 				this.setLastToDisplay();
 			}
-
-		} //fim if
-	} //fim func
+		}
+	}
 
 	execBtn(value) {
 		switch (value) {
