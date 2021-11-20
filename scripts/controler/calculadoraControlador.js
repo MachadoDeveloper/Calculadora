@@ -129,6 +129,9 @@ class CalculadoraControlador {
 
 	addDot() {
 		let lastOperator = this.getLastOperator()
+
+		if(typeof(lastOperator) === 'string' && lastOperator.split('').includes('.')) return;
+		
 		if(this.isOperator(lastOperator) || !lastOperator) {
 			this.pushOperator('0.');
 		}else{
@@ -151,7 +154,7 @@ class CalculadoraControlador {
 				this.pushOperator(value);
 			} else {
 				let newValue = this.getLastOperator().toString() + value.toString();
-				this.setLastOperator(parseFloat(newValue));
+				this.setLastOperator(newValue);
 				this.setLastToDisplay();
 			}
 		}
