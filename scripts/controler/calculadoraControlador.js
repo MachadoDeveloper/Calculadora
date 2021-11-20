@@ -18,12 +18,55 @@ class CalculadoraControlador {
 		this._currentDate;
 		this.initialize();
 		this.initButtonsEvents();
+		this.initKeyBoard();
 	}
 
 	initialize() {
 		this.setDisplayDateTime();
 		setInterval(() => this.setDisplayDateTime(), 1000);
 		this.setLastToDisplay();
+	}
+
+	initKeyBoard() {
+		document.addEventListener('keyup', e => {
+
+			switch (e.key) {
+				case 'Escape':
+					this.clearAll();
+					break;
+				case 'Backsapce':
+					this.clearEntry();
+					break;
+				case '+':
+				case '-':
+				case '*':
+				case '/':
+				case '%':
+					this.addOperation(e.key);
+					break;
+				case 'Enter':
+				case '=':
+					this.calc();
+					break;
+				case '.':
+				case ',':
+					this.addDot();
+					break;
+				case '0':
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9':
+					this.addOperation(parseFloat(e.key));
+					break;
+			}
+		});
+
 	}
 
 	addEventListenerAll(element, events, func) {
@@ -130,11 +173,11 @@ class CalculadoraControlador {
 	addDot() {
 		let lastOperator = this.getLastOperator()
 
-		if(typeof(lastOperator) === 'string' && lastOperator.split('').includes('.')) return;
-		
-		if(this.isOperator(lastOperator) || !lastOperator) {
+		if (typeof (lastOperator) === 'string' && lastOperator.split('').includes('.')) return;
+
+		if (this.isOperator(lastOperator) || !lastOperator) {
 			this.pushOperator('0.');
-		}else{
+		} else {
 			this.setLastOperator(lastOperator.toString() + '.');
 		}
 		this.setLastToDisplay();
